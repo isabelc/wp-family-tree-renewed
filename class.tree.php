@@ -64,9 +64,9 @@ class tree {
 				$father->children[] = $fm->post_id;
 			}
 			if (isset($fm->mother) && !empty($fm->mother) && is_numeric($fm->mother)) {
-				$the_family[$fm->post_id]->name_mother 	= $the_family[$fm->mother]->name;
-				$the_family[$fm->post_id]->url_mother 		= $the_family[$fm->mother]->url;
-				$mother = $the_family[$fm->mother];
+				$the_family[$fm->post_id]->name_mother = $the_family[$fm->mother]->name ?? '';
+				$the_family[$fm->post_id]->url_mother = $the_family[$fm->mother]->url ?? '';
+				$mother = $the_family[$fm->mother] ?? '';
 				$mother->children[] = $fm->post_id;
 			}
 		}
@@ -86,8 +86,8 @@ class tree {
 				}
 			}
 			if (isset($fm->mother) && !empty($fm->mother) && is_numeric($fm->mother)) {
-				$mother = $the_family[$fm->mother];
-				if (is_array($mother->children)) {
+				$mother = $the_family[$fm->mother] ?? '';
+				if (isset($mother->children) && is_array($mother->children)) {
 					$siblings_m = $mother->children; 
 				}
 			}

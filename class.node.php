@@ -96,7 +96,7 @@ class node {
 		}
 		$html .= '</td></tr>';
 		$html .= '<tr><td colspan="4">Children: ';
-		if (count($this->children) > 0) {
+		if (! empty($this->children) && (count($this->children) > 0)) {
 			$first = true; 
 			foreach ($this->children as $child) {
 				if (!$first) {
