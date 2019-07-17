@@ -107,7 +107,7 @@ class node {
 				$html .= '<span itemprop="children" itemscope="" itemtype="https://schema.org/Person"><a href="'.$the_family[$child]->url.'" itemprop="children" itemprop="sameAs"><span itemptop="name">'.$the_family[$child]->name.'</span></a></span> ';
 			}
 		} else {
-			$html .= 'none ';
+			$html .= ' ';
 		}
 		$html .= '</td></tr>';
 		$html .= '<tr><td colspan="4">Siblings: ';
@@ -122,7 +122,7 @@ class node {
 				$html .= '<a href="'.$the_family[$sibling]->url.'" itemprop="sibling">'.$the_family[$sibling]->name.'</a>';
 			}
 		} else {
-			$html .= 'none ';
+			$html .= ' ';
 		}
 		$html .= '</td></tr><tr><td colspan="4">Spouse: ';
 
