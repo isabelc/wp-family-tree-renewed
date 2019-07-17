@@ -1,0 +1,44 @@
+=== WP Family Tree Renewed ===
+Contributors: isabel104
+Requires at least: 3.7
+Tested up to: 5.3
+Requires PHP: 5.6
+Stable tag: 2.1
+License: GNU GPLv2
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+WP Family Tree Renewed is a family tree generator plugin for Wordpress.
+
+== Changelog ==
+
+= 2.1 =
+
+* Fix - Removed some PHP warnings.
+
+= 1.0.6-mod-10 =
+
+* Release date: April 13, 2015
+* New - Family tree diagrams can now be dragged on touch/mobile devices.
+* New - Mobile repsonsive styles for family bio data on family member pages and family directory list.
+* Tweak - Use wp_enqueue_scripts to load scripts and styles.
+
+= 1.0.6-mod-9 =
+* Tweak - Rework the family_tree_update_post function to not accidentally delete meta on update.
+
+= 1.0.6-mod-8 =
+* Fix - Removed PHP Error notices which appeared while editing posts without Family Tree meta.
+* Fix - Removed deprecated wp_specialchars.
+
+= 1.0.6-mod-4 =
+* Fix: Family tree post meta was not able to be erased.
+* New - Show the spouse name and link with the other bio data for each member. Also added the spouse microdata item property.
+* New - In addition to spouse, show Partners with the bio data. Partners are people who the person has common children with.
+* New - The family list is now in alphabetical order by first name.
+
+= 1.0.6mod-rc-3 =
+* Fix - Removed PHP error notice for deprecated use of User Levels instead of capabilites.
+* Fix - Removed several other PHP warnings.
+
+= 1.0.6mod-rc-1 =
+* New - Added schema.org microdata for person to the single family member pages, and on the family members directory list page. Person properties include name, birth date, death date, parent, children, sibling, and image.
+* Tweak - Added spaces between names and dates in tables for better description snippets in search results.
