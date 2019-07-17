@@ -2,7 +2,7 @@
 Contributors: isabel104
 Requires at least: 3.7
 Tested up to: 5.3
-Requires PHP: 5.6
+Requires PHP: 7.0
 Stable tag: 2.1
 License: GNU GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
