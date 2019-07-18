@@ -43,6 +43,7 @@ class node {
 
 		return $fm;
 	}
+	// used by directory list and single post, but not tree page
 	function get_html($the_family) {
 		$html = '<table border="0" width="100%" itemscope itemtype="https://schema.org/Person">';
 		$html .= '<tr><td width="150" style="vertical-align:bottom"><b><a href="'.$this->url.'">';
