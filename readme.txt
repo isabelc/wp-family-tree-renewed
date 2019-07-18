@@ -17,7 +17,7 @@ WP Family Tree Renewed is a family tree generator for WordPress.
 * New - Show images on family tree. Images for each person are now displayed by default, instead of the previous way, which was only on hover.
 * Fix - Fixed opacity on hover over the tree nodes. Previously, the opacity only increased if you hovered over a blank spot on the node. It did not work if you hovered over the person's name or any text.
 * Fix - Removed several PHP error notices.
-* Tweak - Show a blank instead of "none" for Children or Siblings biodata in case children are siblings do exists but are not listed yet because they are alive. "None" is wrong in those cases.
+* Tweak - Show a blank instead of NONE for Children or Siblings biodata in case children are siblings do exists but are not listed yet because they are alive. NONE is wrong in those cases.
 
 = 2.1 =
 
