@@ -28,11 +28,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with WP Family Tree Renewed. If not, see <http://www.gnu.org/licenses/>.
 */
-
 if (!defined('WPFAMILYTREE_URL')){
 	define('WPFAMILYTREE_URL', plugin_dir_url(__FILE__));
 }
-
+include_once plugin_dir_path(__FILE__) . 'updater.php';
+$updater = new WPFTR_Updater(__FILE__ , 'isabelc', 'wp-family-tree-renewed');
 require_once('wpft_options.php');
 require_once('class.node.php');
 require_once('class.tree.php');
