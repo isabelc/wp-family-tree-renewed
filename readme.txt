@@ -26,7 +26,7 @@ WP Family Tree Renewed is a family tree generator for WordPress.
 = 1.0.6-mod-10 =
 
 * Release date: April 13, 2015
-* New - Family tree diagrams can now be dragged on touch/mobile devices.
+* New - Family tree diagrams can now be dragged on touch or mobile devices.
 * New - Mobile repsonsive styles for family bio data on family member pages and family directory list.
 * Tweak - Use wp_enqueue_scripts to load scripts and styles.
 
