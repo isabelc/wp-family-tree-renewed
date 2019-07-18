@@ -3,7 +3,7 @@
 Plugin Name: WP Family Tree Renewed
 Plugin URI:  https://isabelcastillo.com/free-plugins/wp-family-tree
 Description: Family Tree plugin
-Version: 2.2-alpha.3
+Version: 2.2
 Author: Isabel Castillo
 Author URI: https://isabelcastillo.com
 License: GNU GPLv2
