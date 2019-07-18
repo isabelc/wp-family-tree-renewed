@@ -49,9 +49,12 @@ function family_tree_options_subpanel() {
 		}		
 		update_option('bVerticalSpouses', 		($_POST['bVerticalSpouses']=='Y')?'true':'false');
 		// @todo see why this is not used anymore update_option('bMaidenName', 				($_POST['bMaidenName']=='Y')?'true':'false');
-		update_option('bShowGender', 				($_POST['bShowGender']=='Y')?'true':'false');
 
-
+		if ( isset( $_POST['bShowGender'] ) ) {
+			update_option('bShowGender', ($_POST['bShowGender']=='Y')?'true':'false');
+		} else {
+			update_option('bShowGender', 'false');
+		}
 
 		if ( isset( $_POST['bDiagonalConnections'] ) ) {
 			$bDiagonalConnections = $_POST['bDiagonalConnections'] == 'Y' ? 'true' : 'false';
