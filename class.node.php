@@ -38,7 +38,7 @@ class node {
 		$fm->spouse	= get_post_meta($post_detail->ID, 'spouse', true);
 		$fm->born	= get_post_meta($post_detail->ID, 'born', true);
 		$fm->died	= get_post_meta($post_detail->ID, 'died', true);
-		$fm->thumbsrc = wp_get_attachment_image_src(get_post_thumbnail_id($post_detail->ID), array(50,50));
+		$fm->thumbsrc = wp_get_attachment_image_src(get_post_thumbnail_id($post_detail->ID), array(40,40));
 		$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail',array('itemprop' => 'image'));
 
 		return $fm;
