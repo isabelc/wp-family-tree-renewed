@@ -18,3 +18,7 @@ WP Family Tree Renewed is a family tree generator for WordPress.
 * Fix - Fixed opacity on hover over the tree nodes. Previously, the opacity only increased if you hovered over a blank spot on the node. It did not work if you hovered over any text in the node.
 * Fix - Removed several PHP error notices.
 * Tweak - Show a blank instead of NONE for Children or Siblings biodata in case children and siblings do exists but are not listed yet because they are alive. NONE is wrong in those cases.
+
+= 2.1 =
+
+* Fix - Removed some PHP warnings.
