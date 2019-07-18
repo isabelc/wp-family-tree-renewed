@@ -546,7 +546,7 @@
 							redrawTree();
 						}
 					}
-                }).mouseover(function (ev) {// @todo maybe remove this and mouseout
+                }).mouseover(function (ev) {
                     this.animate({"fill-opacity": .75}, 300);
                 }).mouseout(function () {
                     this.animate({"fill-opacity": nodefillopacity}, 300);
@@ -952,7 +952,7 @@
 				
 			}
 
-			theRaphText.click(function () {
+   			theRaphText.click(function () {
 				if (bRefocusOnClick) {
 					var n = findTextOwningNode(this);
 					if (n != null) {
@@ -960,8 +960,12 @@
 						redrawTree();
 					}
 				}
-            });
-			
+            }).mouseover(function (ev) {
+                    node.m_RaphRect.animate({"fill-opacity": .75}, 300);
+                }).mouseout(function () {
+                    node.m_RaphRect.animate({"fill-opacity": nodefillopacity}, 300);
+             });
+
 			incLine();
 
 		} else {
