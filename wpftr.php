@@ -46,7 +46,7 @@ function family_list() {
 	
 	$total = count( $the_family );
 
-	$html = '<p>' . sprintf( __( 'This list currently includes %d family members, listed alphabetically by first name.', 'wp-family-tree' ), $total ) . '</p>';
+	$html = '<p>' . sprintf( __( 'This list currently includes %d family members, listed alphabetically by first name.', 'wpftr' ), $total ) . '</p>';
 
 	// alphabetize the list
 	function compare_by_name($a, $b) {

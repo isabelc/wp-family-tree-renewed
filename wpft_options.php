@@ -230,7 +230,7 @@ function family_tree_options_subpanel() {
 <!--
 	<input type="hidden" name="page_options" value="family_tree_category_key"/>
 -->
-	<input type="submit" name="update_options" class="button" value="<?php _e('Save Changes', 'Localization name') ?> &raquo;" />
+	<input type="submit" name="update_options" class="button" value="<?php _e('Save Changes', 'wpftr') ?> &raquo;" />
 	</p>
 
 	</form>
