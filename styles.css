@@ -82,6 +82,8 @@
 	position:absolute;
 	top:0;
 	left:0;
+	height: 40px;
+	overflow: hidden;
 }
 
 .dynamicDiv {
