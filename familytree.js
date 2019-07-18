@@ -618,30 +618,17 @@
 			
 			if (bBirthAndDeathDates) {
 
-				// @todo show at least 1 of the dates even if both aren't found
-
 				var birth = this.getBirthday() != null ? this.getBirthday() : "", 
 					death = this.getDeathday() != null ? this.getDeathday() : ""; 
 				if (death != "" || (birth != "" && !bConcealLivingDates))
 					r = makeGraphBox(bPrint, r, "("+birth+" - "+death + ")", this);	
 			}
 			
-//			if (bDeath) { }
-			
 
-
-	
 			// final box size adjustments
 			r.height += 3;
 			r.width += 2;
 			
-
-
-
-
-			
-
-
 			m_MyRect.x 		= r.x;	// Save the size of this node's box
 			m_MyRect.y 		= r.y;
 			m_MyRect.width 	= r.width;
@@ -1240,18 +1227,6 @@
 		}
 	};
 
-/*	function addTip(node, txt) {
-	    $(node).mouseenter(function() {
-	       tipText = txt;
-	       tip.fadeIn();
-	       over = true;
-	    }).mouseleave(function() {
-	       tip.fadeOut(200);
-	       over = false;
-	    });
-	};
-*/
-
 	this.setOneNamePerLine = function(bState) 		{ bOneNamePerLine = bState; 			//redrawTree(); 
 	};
 	this.setOnlyFirstName = function(bState) 		{ bOnlyFirstName = bState; 				//redrawTree(); 
@@ -1287,17 +1262,8 @@
 	this.setPortraitPos = function(iX, iY)	{ m_iPortraitXPos = iX; m_iPortraitYPos = iY;
 	};	
 
-	this.getOneNamePerLine = function() 			{ return bOneNamePerLine; 		};
-	this.getOnlyFirstName = function() 				{ return bOnlyFirstName; 		};
-	this.getBirthAndDeathDates = function() 		{ return bBirthAndDeathDates; 	};
-	this.getConcealLivingDates = function() 		{ return bConcealLivingDates; 	};
-	this.getDeath = function() 						{ return bDeath; 				};
-	this.getShowSpouse = function() 				{ return bShowSpouse; 			};
 	this.getShowOneSpouse = function() 				{ return bShowOneSpouse;		};
-	this.getVerticalSpouses = function() 			{ return bVerticalSpouses;		};
-	this.getMaidenName = function() 				{ return bMaidenName; 			};
 	this.getShowGender = function() 				{ return bShowGender; 			};
-	this.getDiagonalConnections = function() 		{ return bDiagonalConnections; 	};
 	this.getRefocusOnClick = function() 			{ return bRefocusOnClick; 		};
 	this.getShowToolbar = function() 				{ return bShowToolbar; 			};
 	this.getNodeRounding = function() 				{ return m_iNodeRounding;		};
