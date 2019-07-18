@@ -38,16 +38,12 @@ class node {
 		$fm->spouse	= get_post_meta($post_detail->ID, 'spouse', true);
 		$fm->born	= get_post_meta($post_detail->ID, 'born', true);
 		$fm->died	= get_post_meta($post_detail->ID, 'died', true);
-		if (function_exists('get_post_thumbnail_id')) {
-			$thumbid = get_post_thumbnail_id($post_detail->ID);
-			$thumbsrc = wp_get_attachment_image_src($thumbid, 'thumbnail');
-			$fm->thumbsrc = $thumbsrc[0];
-			$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail',array('itemprop' => 'image'));
-		}
+		$fm->thumbsrc = wp_get_attachment_image_src(get_post_thumbnail_id($post_detail->ID), array(50,50));
+		$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail',array('itemprop' => 'image'));
+
 		return $fm;
 	}
 	function get_html($the_family) {
-
 		$html = '<table border="0" width="100%" itemscope itemtype="https://schema.org/Person">';
 		$html .= '<tr><td width="150" style="vertical-align:bottom"><b><a href="'.$this->url.'">';
 		if (!empty($this->thumbhtml)) {
@@ -55,22 +51,21 @@ class node {
 		}
 		$html .= '<span itemprop="name">'.$this->name.'</span></a></b> </td>';
 		$html .= '<td width="80" style="vertical-align:bottom">';
-		$plugloc = plugin_dir_url( __FILE__ );
 //		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
 		if ($this->gender == 'm') {
-			$html .= '<img alt="Male" title="Male" src="'.$plugloc.'icon-male-small.gif"/>';
+			$html .= '<img alt="Male" title="Male" src="'.WPFAMILYTREE_URL.'icon-male-small.gif"/>';
 		} else if ($this->gender == 'f') {
-			$html .= '<img alt="Female" title="Female" src="'.$plugloc.'icon-female-small.gif"/>';
+			$html .= '<img alt="Female" title="Female" src="'.WPFAMILYTREE_URL.'icon-female-small.gif"/>';
 		} else {
-			$html .= '<img alt="Gender not specified" title="Gender not specified" src="'.$plugloc.'icon-qm-small.gif"/>';
+			$html .= '<img alt="Gender not specified" title="Gender not specified" src="'.WPFAMILYTREE_URL.'icon-qm-small.gif"/>';
 		}
 //		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
 		
 		$ftlink = wpft_options::get_option('family_tree_link');
 		if (strpos($ftlink, '?') === false) {
-			$html .=' <a href="'.$ftlink.'?ancestor='.$this->post_id.'"><img border="0" alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+			$html .=' <a href="'.$ftlink.'?ancestor='.$this->post_id.'"><img border="0" alt="View tree" title="View tree" src="'.WPFAMILYTREE_URL.'icon-tree-small.gif"/></a>';
 		} else {
-			$html .=' <a href="'.$ftlink.'&ancestor='.$this->post_id.'"><img border="0" alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+			$html .=' <a href="'.$ftlink.'&ancestor='.$this->post_id.'"><img border="0" alt="View tree" title="View tree" src="'.WPFAMILYTREE_URL.'icon-tree-small.gif"/></a>';
 		}
 		
 		$html .= '</td>';
@@ -165,7 +160,6 @@ class node {
 		return $html;
 	}
 	function get_toolbar_div() {
-		$plugloc = plugin_dir_url( __FILE__ );
 		$ftlink = wpft_options::get_option('family_tree_link');
 
 		if (strpos($ftlink, '?') === false) {
@@ -179,51 +173,25 @@ class node {
 		if (wpft_options::get_option('bShowToolbar') == 'true') {
 			$html .= '<div class="toolbar" id="toolbar'.$this->post_id.'">';
 			if (wpft_options::get_option('family_tree_toolbar_blogpage') == 'Y') {
-				$html .= '<a class="toolbar-blogpage" href="'.$permalink.'" title="View information about '.htmlspecialchars($this->name).'"><img border="0" class="toolbar-blogpage" src="'.$plugloc.'open-book.png"></a>';
+				$html .= '<a class="toolbar-blogpage" href="'.$permalink.'" title="View information about '.htmlspecialchars($this->name).'"><img border="0" class="toolbar-blogpage" src="'.WPFAMILYTREE_URL.'open-book.png"></a>';
 			}
 			if (wpft_options::get_option('family_tree_toolbar_treenav') == 'Y') {
-				$html .= '<a class="toolbar-treenav" href="'.$ftlink.'" title="View the family of '.htmlspecialchars($this->name).'"><img border="0" class="toolbar-treenav" src="'.$plugloc.'tree.gif"></a>';
+				$html .= '<a class="toolbar-treenav" href="'.$ftlink.'" title="View the family of '.htmlspecialchars($this->name).'"><img border="0" class="toolbar-treenav" src="'.WPFAMILYTREE_URL.'tree.gif"></a>';
 			}
-			if (!empty($this->thumbsrc)) {
 
-				// @todo remove this gif
-				
-				$html .= '<img border="0" class="toolbar-treenav" src="'.$plugloc.'camera.gif">';
-			}
 			$html .= '</div>';
 		}
 		return $html;
 	}
 
-	// @todo inspect: 
-
 	function get_thumbnail_div() {
-		$html = '';
+		$html = '<div class="wpft_thumbnail" id="thumbnail'.$this->post_id.'">';
+		// @todo update if image size changes
+		$html .= '<img id="ftportrait'.$this->post_id.'" width="40" height="40">';
 
-
-		/****************************************************
-		* @todo
-		* the following div is getting style:
-		
-		visibility: hidden; left: 127px; top: 293px;
-
-		****************************************************/
-		
-
-
-
-		$html .= '<div class="wpft_thumbnail" id="thumbnail'.$this->post_id.'">';
-
-
-
-//		$html .= 'Thumbnail-'.$this->post_id;
-		if (!empty($this->thumbsrc)) {
-			$html .= '<img src="'.$this->thumbsrc.'">';
-		}
 		$html .= '</div>';
 		return $html;
 	}
-
 
 	function get_box_html($the_family) {
 		$html = '';

@@ -8,7 +8,7 @@ Author: Isabel Castillo
 Author URI: https://isabelcastillo.com
 License: GNU GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: wpftr @todo update all
+Text Domain: wpftr
 Domain Path: /languages
 
 Copyright 2015-2019 Isabel Castillo
@@ -28,6 +28,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with WP Family Tree Renewed. If not, see <http://www.gnu.org/licenses/>.
 */
+
+if (!defined('WPFAMILYTREE_URL')){
+	define('WPFAMILYTREE_URL', plugin_dir_url(__FILE__));
+}
+
 require_once('wpft_options.php');
 require_once('class.node.php');
 require_once('class.tree.php');
@@ -126,7 +131,13 @@ function family_tree( $root = '' ) {
 
 		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
 		$str .= '"Thumbnaildiv=thumbnail'.$node->post_id.'",'."\n";
-
+		$img = $node->thumbsrc[0] ?: '';
+		if (!$img) {
+			$f = WPFAMILYTREE_URL.'female.png';
+			$m = WPFAMILYTREE_URL.'male.png';
+			$img = 'f' === $node->gender ? $f : $m;
+		}
+		$str .= '"imageurl='.$img.'",'."\n";
 		$str .= '"Parent=';
 		if ( isset($the_family[$node->mother]) ) {
 			$str .= $the_family[$node->mother]->post_id;
@@ -170,9 +181,8 @@ function family_tree( $root = '' ) {
 	} else {
 		$out .= 'setToolbarYPad(0);'."\n";
 	}
-	$out .= 'setToolbarPos(true, 3, 3);'."\n";
+	$out .= 'setPortraitPos(3, 3);';
 	$out .= 'setMinBoxWidth('.wpft_options::get_option('nodeminwidth').');'."\n";
-
 	$out .= 'jQuery(document).ready(function($){'."\n";
 	$out .= "	$('#dragableElement').draggableTouch();"."\n";
 	$out .= '	familytreemain();'."\n";
@@ -195,20 +205,15 @@ function family_tree( $root = '' ) {
 		$out .= $node->get_toolbar_div();
 	}
 	$out .= '</div>'."\n";
-	$out .= '<div id="thumbnail-container">'."\n";
+	$out .= '<div id="thumbnail-container">';
 	foreach ($the_family as $node) {
 		$out .= $node->get_thumbnail_div();
 	}
 	$out .= '</div>'."\n";
-	$out .= '<div id="familytree"></div>'."\n";
-
-	// @todo remove image on hover since it will now be shown by default
-
-	$out .= '<img name="hoverimage" id="hoverimage" style="visibility:hidden;" >'."\n";
-	
-	$out .= '</div>'."\n"; // tree-container
-	$out .= '</div>'."\n"; // borderBox
-	$out .= '</div>'."\n"; // dragableElement
+	$out .= '<div id="familytree"></div>';
+	$out .= '</div>'; // tree-container
+	$out .= '</div>'; // dragableElement
+	$out .= '</div>'; // borderBox
 	return $out;
 }
 function bio_data() {
@@ -440,12 +445,11 @@ add_shortcode('family-members', 'wpft_family_members_shortcode');
 add_action('admin_menu', 'family_tree_options_page');
 
 function wpft_addHeaderCode() {
-	$plugloc = plugin_dir_url( __FILE__ );
 	wp_enqueue_script('jquery');
-	wp_enqueue_script('raphael', $plugloc.'raphael.js');
-	wp_enqueue_script('familytree', $plugloc.'familytree.js');
-	wp_enqueue_script('draggabletouch', $plugloc.'jquery.draggableTouch.js', array( 'jquery' ));
-	wp_enqueue_style('ft-style', $plugloc.'styles.css');
+	wp_enqueue_script('raphael', WPFAMILYTREE_URL.'raphael.js');
+	wp_enqueue_script('familytree', WPFAMILYTREE_URL.'familytree.js');
+	wp_enqueue_script('draggabletouch', WPFAMILYTREE_URL.'jquery.draggableTouch.js', array( 'jquery' ));
+	wp_enqueue_style('ft-style', WPFAMILYTREE_URL.'styles.css');
 }
 // Enable the ability for the family tree to be loaded from pages
 add_filter('the_content','family_list_insert');

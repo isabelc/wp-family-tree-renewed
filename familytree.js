@@ -9,15 +9,6 @@
 	
 	var m_vAllNodes = new Array();
 
-//	var canvasbgcol = "#55c";
-//	var nodeoutlinecol = "#ff0";
-//	var nodefillcol	= "#0ff";
-//	var nodefillopacity = .4;
-//	var nodetextcolour = "#000";
-
-//	var BOX_LINE_Y_SIZE		= 100;
-
-	
 	var	m_iFontLineHeight 	= 0,
 		m_iFontLineDescent 	= 0,
 		m_yLine				= 0,
@@ -28,12 +19,12 @@
 		m_iToolbarYPad		= 15,
 		m_iMinBoxWidth		= 40,
 		m_iToolbarXPos		= 0,
-		m_iToolbarYPos		= 0,
-		m_bCornered			= false,
+		m_iPortraitXPos		= 0,
+		m_iPortraitYPos		= 0,
+		m_iPortraitYPad = 45,// portrait height + padding bottom // @todo update if portrait height changes
 		BOX_Y_DELTA			= 40,
 		iMaxHoverPicHeight	= 150,
 		iMaxHoverPicWidth	= 150,
-		aCurrentHoverPic	= null,
 		aFamilyTreeElement 	= null,
 		sUnknownGenderLetter= null;
 	
@@ -68,9 +59,6 @@
 		m_CanvasRect = m_Canvas.rect(0, 0, iCanvasWidth, iCanvasHeight, 10).attr({fill: canvasbgcol, stroke: "none"}).toBack();
 
         text_sStartName = document.getElementById("focusperson");
-//        text_sStartName.onkeydown = onKeyDown_Name; 
-        hoverpic = document.getElementById("hoverimage");
-//        testdiv = document.getElementById("sunilsdiv1");
         
         createTreeFromArray(tree_txt);
         loadImages();
@@ -102,7 +90,6 @@
 		var m_sFTID			= sID,
 			m_sName			= "?",
 			m_sImageURL		= null,
-			m_HoverPic		= null,
 			m_MyToolbarDiv	= null,
 			m_MyThumbnailDiv	= null,
 //			m_MyDivRaph		= null,
@@ -190,7 +177,6 @@
 				
 		this.setImageURL = function(sURL) {
 			m_sImageURL 	= sURL;
-			m_HoverPic		= new Image();
 		};
 		
 		this.setToolbarDiv = function(sDivName) {
@@ -250,10 +236,6 @@
 			return m_MyThumbnailDiv;
 		};
 
-		this.getImage = function() {
-			return m_HoverPic;
-		};
-		
 		this.getShortInfoURL = function() {
 			return m_sShortInfoURL;
 		};
@@ -414,8 +396,9 @@
 		};
 		
 		this.getBoxY = function(iRow) {
-//			return iRow*m_iTallestBoxSize + BOX_Y_DELTA;
-			return iRow*BOX_LINE_Y_SIZE + BOX_Y_DELTA;
+			BOX_LINE_Y_SIZE = parseInt(BOX_LINE_Y_SIZE);
+			return (iRow * (m_iToolbarYPad + BOX_LINE_Y_SIZE)) + BOX_Y_DELTA;
+
 			
 	/*		if (iRow == 0)
 				return BOX_Y_DELTA;
@@ -520,7 +503,10 @@
 
 			if (!bPrint) {
 				m_MyRect.width = m_iMinBoxWidth;
-				m_MyRect.height = m_iToolbarYPad;
+
+				// add room for toolbar at bottom of node box
+				m_MyRect.height = m_iPortraitYPad + m_iToolbarYPad;
+
 				m_BothRect.width = 0;
 				m_BothRect.height = 0;
 			}
@@ -528,10 +514,18 @@
 			r.y = m_MyRect.y;
 			r.width = m_MyRect.width;
 			r.height = m_MyRect.height;
+
 			if (bPrint) {
+
 				this.m_RaphRect = m_Canvas.rect();
 				r.x = X-m_BothRect.width/2;
 				r.y = Y;
+
+
+
+
+
+
 				growCanvas(r.x+r.width, r.y+r.height+1);
 				this.m_RaphRect.attr({	
 										"x": r.x,
@@ -552,35 +546,44 @@
 							redrawTree();
 						}
 					}
-                }).mouseover(function (ev) {
+                }).mouseover(function (ev) {// @todo maybe remove this and mouseout
                     this.animate({"fill-opacity": .75}, 300);
-					var n = findRectOwningNode(this);
-					if (n != null) {
-						var im = n.getImage();
-						if (im != null) {
-							var coords = getPageEventCoords(ev);
-							hoverpic.src = encodeURI(n.getImageURL());
-
-							// @todo must add image width & height atts in tree.
-							
-							hoverpic.width = im.width;
-							hoverpic.height = im.height;
-							hoverpic.style.left =  (coords.left+20) + 'px';
-							hoverpic.style.top = (coords.top-10) + 'px';
-							hoverpic.style.visibility="visible";
-						}
-					}                    
                 }).mouseout(function () {
-                	hoverpic.style.visibility="hidden";
                     this.animate({"fill-opacity": nodefillopacity}, 300);
                 });
 
-//				System.out.println("Box corner for "+getName()+" = "+r.x+","+r.y+" w="+r.width+" h="+r.height);
+				
+				// add portrait
+
+				var n = findRectOwningNode(this.m_RaphRect);
+
+				if (n != null) {
+
+					var imgEl = document.getElementById('ftportrait' + n.getFTID());
+
+					if (imgEl != null) {
+
+						imgEl.src = encodeURI(n.getImageURL());
+
+					}
+				}                    			
+	
+
+
+
+
+
+
 			}
+
+
 			
 			var sGender = (bShowGender 	&& (m_sGender != null)) ? " ("+m_sGender+")" : "";
 			var sMaiden = (bMaidenName 	&& (m_sMaiden != null)) ? " ("+m_sMaiden+")" : "";
 			
+
+						
+
 			if (bOnlyFirstName) {
 				// split full name into list of single names
 				sTokens = this.getName().split(" ");
@@ -588,6 +591,7 @@
 
 			} else {
 				if (bOneNamePerLine) {
+
 					
 					sTokens = this.getName().split(" ");
 					for (var i = 0; i < sTokens.length; ++i) {
@@ -596,7 +600,12 @@
 						else
 							r = makeGraphBox(bPrint, r, sTokens[i], this);
 							
+					
+
 					}
+
+
+
 
 					if (bMaidenName && (m_sMaiden != null))
 						r = makeGraphBox(bPrint, r, sMaiden, this);
@@ -608,24 +617,36 @@
 			}
 			
 			if (bBirthAndDeathDates) {
+
+				// @todo show at least 1 of the dates even if both aren't found
+
 				var birth = this.getBirthday() != null ? this.getBirthday() : "", 
 					death = this.getDeathday() != null ? this.getDeathday() : ""; 
 				if (death != "" || (birth != "" && !bConcealLivingDates))
-					r = makeGraphBox(bPrint, r, "("+birth+"-"+death + ")", this);	
+					r = makeGraphBox(bPrint, r, "("+birth+" - "+death + ")", this);	
 			}
 			
 //			if (bDeath) { }
 			
+
+
+	
 			// final box size adjustments
 			r.height += 3;
 			r.width += 2;
 			
-//			if (!bPrint) {
-				m_MyRect.x 		= r.x;	// Save the size of this node's box
-				m_MyRect.y 		= r.y;
-				m_MyRect.width 	= r.width;
-				m_MyRect.height = r.height;
-//			}
+
+
+
+
+			
+
+
+			m_MyRect.x 		= r.x;	// Save the size of this node's box
+			m_MyRect.y 		= r.y;
+			m_MyRect.width 	= r.width;
+			m_MyRect.height = r.height;
+
 
 			if (bPrint && bShowSpouse) {
 				
@@ -665,7 +686,7 @@
 		};
 		
 		this.setImage = function(img) {
-			m_HoverPic = img;
+
 		};
 		
 		this.setDiv = function(div) {
@@ -904,48 +925,45 @@
 				
 		if (bPrintIt) {
 			var w = 0;
-//FONT			var h = 0;
+
 			var theRaphText = m_Canvas.text(0, 0, sAddString != null ? decodeURI(sAddString) : "");
-//FONT			theRaphText.attr({"font": '18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif '});
+
 			theRaphText.attr({"fill": nodetextcolour});
 			node.getRaphTexts().push(theRaphText);
 			
 			w = theRaphText.getBBox().width;
-//FONT			h = theRaphText.getBBox().height;
+
 			w = 0;	//X Remove this line if Java!
 			theRaphText.attr({
 				x: theBox.x + (theBox.width - w)/2 + m_iBoxBufferSpace - 2, 
-				y: m_iToolbarYPad + theBox.y + m_iFontLineHeight + getLine()*getPixelsPerLine()		// h + getLine()*h  //FONT
+				y: m_iPortraitYPad + theBox.y + m_iFontLineHeight + getLine()*getPixelsPerLine()
 			}).toFront();
 			
 			var toolbardiv = node.getToolbarDiv();
 			if (bShowToolbar && (toolbardiv != null)) {
 				// NOTE! For style.width to work on Firefox, the div should include style.width = numberpx!
-				var tbw = parseInt(toolbardiv.style.width);
-				var tbh = parseInt(toolbardiv.style.height);
-				toolbardiv.style.visibility="visible";
-				if (m_bCornered) {
-					toolbardiv.style.left = m_iToolbarXPos + theBox.x + 'px';
-					toolbardiv.style.top  = m_iToolbarYPos + theBox.y + 'px';					
-				} else {
-					toolbardiv.style.left = m_iToolbarXPos + theBox.x + (theBox.width - tbw)/2+'px';
-					toolbardiv.style.top  = m_iToolbarYPos + theBox.y /* - tbh/2*/ +'px';
-				}
+	
+
+				var tbw = parseInt(toolbardiv.offsetWidth);
 				
+				toolbardiv.style.visibility="visible";
+
+				toolbardiv.style.left = m_iToolbarXPos + theBox.x + (theBox.width - tbw)/2+'px';
+
+				toolbardiv.style.top  = (theBox.y + theBox.height - m_iToolbarYPad) +'px';
+
+	
 			}
 
 			var thumbnaildiv = node.getThumbnailDiv();
+
 			if (thumbnaildiv != null) {
-				// NOTE! For style.width to work on Firefox, the div should include style.width = numberpx!
-				var tbw = parseInt(thumbnaildiv.style.width);
-				var tbh = parseInt(thumbnaildiv.style.height);
-				thumbnaildiv.style.visibility="hidden";
-				thumbnaildiv.style.left = m_iToolbarXPos + theBox.x + 50 + 'px';
-				thumbnaildiv.style.top  = m_iToolbarYPos + theBox.y + 50 + 'px';					
+
+				// @todo update 40 to portrait width if needed
+				thumbnaildiv.style.left = m_iPortraitXPos + theBox.x + (theBox.width - 40)/2 + 'px';//center the image
+				thumbnaildiv.style.top  = m_iPortraitYPos + theBox.y + 'px';				
 				
 			}
-
-
 
 			theRaphText.click(function () {
 				if (bRefocusOnClick) {
@@ -955,43 +973,6 @@
 						redrawTree();
 					}
 				}
-            }).mouseover(function (ev) {
-
-				var n = findTextOwningNode(this);
-				if (n != null) {
-					var tnd = n.getThumbnailDiv();
-					tnd.style.visibility = "visible";
-				}
-				
-/*					var r = n.getRaphRect();
-					var im = n.getImage();
-               r.animate({"fill-opacity": .75}, 300);
-					if (im != null) {
-						var coords = getPageEventCoords(ev);
-						hoverpic.src = encodeURI(n.getImageURL());
-						hoverpic.width = im.width;
-						hoverpic.height = im.height;
-						hoverpic.style.left = (coords.left+20) + 'px';
-						hoverpic.style.top = (coords.top-10) + 'px';
-						hoverpic.style.visibility = "visible";
-					}
-				}
-*/
-            }).mouseout(function () {
-
-					var n = findTextOwningNode(this);
-					if (n != null) {
-						var tnd = n.getThumbnailDiv();
-						tnd.style.visibility = "hidden";
-					}
-/*
-            	hoverpic.style.visibility="hidden";	
-					var n = findTextOwningNode(this);
-					if (n != null) {
-						var r = n.getRaphRect();
-	               r.animate({"fill-opacity": .4}, 300);
-					}
-*/
             });
 			
 			incLine();
@@ -1015,6 +996,9 @@
 				theBox.width = w;
 	
 			theBox.height += getPixelsPerLine(); //h; //FONT
+
+
+
 		}
 		
 		return theBox;
@@ -1040,6 +1024,7 @@
 				continue;
 			
 			sKey = sTokens[0].toLowerCase();
+
 			if (sKey == "esscottiftid") {
 				n = findOrCreate(sTokens[1]);	// Guarantees the node exists after receiving "esscottiftid" key
 				
@@ -1112,7 +1097,6 @@
 	}
 	
 	function resetObjectStates() {
-    	hoverpic.style.visibility="hidden";
 		var i = 0;
 		var len = m_vAllNodes.length;
 		while (i < len) { 
@@ -1154,8 +1138,6 @@
 				continue;
 			var img = new Image();
 			n.setImage(img);
-//			aFamilyTreeElement.appendChild(img);
-			img.style.visibility="hidden";
 			img.src = encodeURI(sUrl);
 			img.onload = function() {
 			    var max_height = iMaxHoverPicHeight;
@@ -1269,8 +1251,6 @@
 	    });
 	};
 */
-	this.setMaxHoverPicWidth = function(iWidth) 	{ iMaxHoverPicWidth = iWidth; 	};
-	this.setMaxHoverPicHeight= function(iHeight) 	{ iMaxHoverPicHeight = iHeight; };
 
 	this.setOneNamePerLine = function(bState) 		{ bOneNamePerLine = bState; 			//redrawTree(); 
 	};
@@ -1299,10 +1279,13 @@
 	this.setShowToolbar = function(bState)			{ bShowToolbar = bState; 					//redrawTree(); 
 	};
 	this.setNodeRounding = function(iRadius)		{ m_iNodeRounding = iRadius;	};
-	this.setToolbarYPad = function(iYPad)			{ m_iToolbarYPad = iYPad; 		};
-	this.setMinBoxWidth = function(iMinWidth)		{ m_iMinBoxWidth = iMinWidth;	};
-	this.setToolbarPos = function(bCorner, iX, iY)	{ m_bCornered = bCorner; m_iToolbarXPos = iX; m_iToolbarYPos = iY; //redrawTree(); 
+	this.setToolbarYPad = function(iYPad) {
+		m_iToolbarYPad = iYPad;
 	};
+	this.setMinBoxWidth = function(iMinWidth)		{ m_iMinBoxWidth = iMinWidth;	};
+
+	this.setPortraitPos = function(iX, iY)	{ m_iPortraitXPos = iX; m_iPortraitYPos = iY;
+	};	
 
 	this.getOneNamePerLine = function() 			{ return bOneNamePerLine; 		};
 	this.getOnlyFirstName = function() 				{ return bOnlyFirstName; 		};
@@ -1319,12 +1302,6 @@
 	this.getShowToolbar = function() 				{ return bShowToolbar; 			};
 	this.getNodeRounding = function() 				{ return m_iNodeRounding;		};
 	this.getNodeRounding = function()				{ return m_iNodeRounding = iRadius;	};
-	this.getToolbarYPad = function()				{ return m_iToolbarYPad; 	};
-	this.getMinBoxWidth = function()				{ return m_iMinBoxWidth;	};
-	this.getToolbarPosX = function()				{ return m_iToolbarXPos;	};
-	this.getToolbarPosY = function()				{ return m_iToolbarYPos; 	};
-	this.getToolbarCornered = function()			{ return m_bCornered; 		};
-
 	this.onFocusPersonChanged = function(e) {
 //		value = value.replace("\n", "");
 

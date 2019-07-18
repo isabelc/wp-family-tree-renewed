@@ -102,7 +102,6 @@ function family_tree_options_subpanel() {
 	if (function_exists('wp_nonce_field')) {
 		wp_nonce_field('family-tree-action_options');
 	}
-	$plugloc = plugin_dir_url( __FILE__ );
 ?>
 	<h3>General settings</h3>
 	<table class="form-table">
@@ -178,11 +177,11 @@ function family_tree_options_subpanel() {
 			<td><input name="bShowToolbar" type="checkbox" id="bShowToolbar" value="Y" <?php echo (wpft_options::get_option('bShowToolbar')=='true')?' checked':''; ?> /></td>
 		</tr>
 		<tr valign="top">
-			<th scope="row"><label for="family_tree_toolbar_blogpage">Enable blogpage link <img src="<?php echo $plugloc; ?>open-book.png"></label></th>
+			<th scope="row"><label for="family_tree_toolbar_blogpage">Enable blogpage link <img src="<?php echo WPFAMILYTREE_URL; ?>open-book.png"></label></th>
 			<td><input name="family_tree_toolbar_blogpage" type="checkbox" id="family_tree_toolbar_blogpage" value="Y" <?php echo (wpft_options::get_option('family_tree_toolbar_blogpage')=='Y')?' checked':''; ?> /></td>
 		</tr>
 		<tr valign="top">
-			<th scope="row"><label for="family_tree_toolbar_treenav">Enable tree nav link <img src="<?php echo $plugloc; ?>tree.gif"></label></th>
+			<th scope="row"><label for="family_tree_toolbar_treenav">Enable tree nav link <img src="<?php echo WPFAMILYTREE_URL; ?>tree.gif"></label></th>
 			<td><input name="family_tree_toolbar_treenav" type="checkbox" id="family_tree_toolbar_treenav" value="Y" <?php echo (wpft_options::get_option('family_tree_toolbar_treenav')=='Y')?' checked':''; ?> /></td>
 		</tr>
 	</table>
